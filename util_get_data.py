@@ -9,7 +9,7 @@ def get_target_df(province, subset):
     # If it's a test set
     if subset == 'Test':
         target_url = f'../{province}/Test/{province}.csv'
-        return pd.read_csv(target_url, index_col=0)
+        return pd.read_csv(target_url, index_col=0, parse_dates=True)
 
     # If it's a train set
     target_url = f'../{province}/Train/{province}.txt'

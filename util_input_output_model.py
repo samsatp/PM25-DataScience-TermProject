@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 provinces = ['Bangkok','Chanthaburi','Chiang Mai','Kanchanaburi','Songkhla']
 
 def prepare_train_data(timesteps):
-    path = f'./data/Train/fire_integrated/'
+    path = f'./data/Train/imputed_fired/'
     data = {}
 
     X = defaultdict(lambda: list())
@@ -20,7 +20,7 @@ def prepare_train_data(timesteps):
 
     for province in provinces:
         # Read preprocessed data
-        df = pd.read_csv(path+f'{province}_fire_integrated.csv', index_col=0, parse_dates=True)
+        df = pd.read_csv(path+f'{province}_imputed_fired.csv', index_col=0, parse_dates=True)
         data[province] = df
 
         # Create Input & Output of model
@@ -39,7 +39,7 @@ def prepare_train_data(timesteps):
     return data, X, Y
 
 def prepare_test_data(Train_data, timesteps):
-    path = "./data/Test/fire_integrated/"
+    path = "./data/Test/imputed_fired/"
     data = {}
     
     predict_at = pd.date_range("2019-3-18 12:00:00", '2020-03-15 18:00:00', freq='6H')
@@ -49,7 +49,7 @@ def prepare_test_data(Train_data, timesteps):
     Y = defaultdict(lambda: list())
     i=0
     for province in provinces:
-        df = pd.read_csv(path+f'{province}_fire_integrated.csv', index_col=0, parse_dates=True)
+        df = pd.read_csv(path+f'{province}_imputed_fired.csv', index_col=0, parse_dates=True)
         data[province] = df
 
         for base in predict_at:
