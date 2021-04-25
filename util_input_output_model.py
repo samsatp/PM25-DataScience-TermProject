@@ -4,9 +4,10 @@ import pandas as pd
 from collections import defaultdict
 from sklearn.preprocessing import MinMaxScaler
 
-provinces = ['Bangkok','Chanthaburi','Chiang Mai','Kanchanaburi','Songkhla']
+provinces = ['Bangkok','Chanthaburi','Chiang Mai','Kanchanaburi','Songkhla','Khon Kaen']
 
-def prepare_train_data(timesteps):
+# PM2.5,WindDir,Wind Speed(km/h),Temp(C),Cambodia_frp,Myanmar_frp,Thailand_frp,Lao_PDR_frp
+def prepare_train_data(timesteps, feature_used:list):
     path = f'./data/Train/imputed_fired/'
     data = {}
 
@@ -20,7 +21,7 @@ def prepare_train_data(timesteps):
 
     for province in provinces:
         # Read preprocessed data
-        df = pd.read_csv(path+f'{province}_imputed_fired.csv', index_col=0, parse_dates=True)
+        df = pd.read_csv(path+f'{province}_imputed_fired.csv', index_col=0, parse_dates=True)[feature_used]
         data[province] = df
 
         # Create Input & Output of model
@@ -38,7 +39,7 @@ def prepare_train_data(timesteps):
 
     return data, X, Y
 
-def prepare_test_data(Train_data, timesteps):
+def prepare_test_data(Train_data, timesteps, feature_used:list):
     path = "./data/Test/imputed_fired/"
     data = {}
     
@@ -49,7 +50,7 @@ def prepare_test_data(Train_data, timesteps):
     Y = defaultdict(lambda: list())
     i=0
     for province in provinces:
-        df = pd.read_csv(path+f'{province}_imputed_fired.csv', index_col=0, parse_dates=True)
+        df = pd.read_csv(path+f'{province}_imputed_fired.csv', index_col=0, parse_dates=True)[feature_used]
         data[province] = df
 
         for base in predict_at:
