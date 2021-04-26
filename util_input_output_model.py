@@ -28,7 +28,7 @@ def prepare_train_data(timesteps, feature_used:list):
         for base in predict_at:
 
             if base-hour_step not in df.index : continue
-            x = df.loc[base-hour_step: base].drop(['PM2.5'], axis=1)
+            x = df.loc[base-hour_step: base] #.drop(['PM2.5'], axis=1)
 
             till = base+timedelta(hours=72)
             if till not in df.index: break
@@ -64,9 +64,9 @@ def prepare_test_data(Train_data, timesteps, feature_used:list):
                     i+=1
                 a = Train_data[province].iloc[-dif:]
                 b = df.loc[:base]
-                x = a.append(b).drop(['PM2.5'], axis=1)
+                x = a.append(b) #.drop(['PM2.5'], axis=1)
             else:
-                x = df.loc[base-hour_step: base].drop(['PM2.5'],axis=1)
+                x = df.loc[base-hour_step: base] #.drop(['PM2.5'],axis=1)
 
             till = base+timedelta(hours=72)
             y = df.loc[base+timedelta(hours=1): till, ['PM2.5']]
@@ -84,7 +84,7 @@ def scale_data(X, Y, data):
 
     for province in provinces:
         # Standardize x, y
-        x = data[province].drop(['PM2.5'], axis=1)
+        x = data[province] #.drop(['PM2.5'], axis=1)
         y = data[province][['PM2.5']]
 
         x_scaler = MinMaxScaler().fit(x)
