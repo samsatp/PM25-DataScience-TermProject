@@ -40,28 +40,48 @@ def prepare_train_data(timesteps, feature_used:list):
     return data, X, Y
 
 def prepare_test_data(Train_data, timesteps, feature_used:list):
-    path = "./data/Test/imputed_fired/"
+    path = "../new test/"
     data = {}
-    
-    predict_at = pd.date_range("2019-3-18 12:00:00", '2020-03-15 18:00:00', freq='6H')
+
+    start_at = pd.Timestamp("2019-3-18 12:00:00")
 
     hour_step = timedelta(hours= timesteps-1)
     X = defaultdict(lambda: list())
     Y = defaultdict(lambda: list())
-    i=0
-    for province in provinces:
-        df = pd.read_csv(path+f'{province}_imputed_fired.csv', index_col=0, parse_dates=True)[feature_used]
-        data[province] = df
 
+    for province in provinces:
+        
+        testdf = pd.read_csv(path+f'{province}_new_test.csv', index_col=0, parse_dates=True)[feature_used]
+        testdf['PM2.5'] = testdf['PM2.5'].replace(0.0, np.nan)
+        testdf = testdf.dropna(subset=['PM2.5'])
+        
+        df = Train_data[province].append(testdf)
+
+        while start_at + timedelta(73) < df.index[-1]:
+            if (start_at not in testdf.index) or (start_at.hour not in [0,6,12,18]):
+                start_at+=timedelta(hours=1)
+                continue
+            
+            idx = list(df.index).index(start_at)
+
+            ## X
+            x = df.iloc[idx-timesteps+1:idx+1]
+            
+            ## Y
+            y = df.iloc[idx+1:idx+73, [0]]
+
+            X[province].append(x)
+            Y[province].append(y)
+            start_at+=timedelta(hours=1)
+
+
+    return data, X, Y            
+'''
         for base in predict_at:
             
             if base-hour_step < df.index[0]:
                 dif = int((df.index[0] - (base-hour_step)).total_seconds()//3600)
-                if i<4:
-                    print('dif :', dif)
-                    print(df.index[0])
-                    print('base =', base)
-                    i+=1
+
                 a = Train_data[province].iloc[-dif:]
                 b = df.loc[:base]
                 x = a.append(b) #.drop(['PM2.5'], axis=1)
@@ -73,7 +93,8 @@ def prepare_test_data(Train_data, timesteps, feature_used:list):
 
             X[province].append(x)
             Y[province].append(y)
-    return data, X, Y
+'''
+    
 
 
 def scale_data(X, Y, data):
