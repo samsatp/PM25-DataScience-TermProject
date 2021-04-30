@@ -40,7 +40,7 @@ def prepare_train_data(timesteps, feature_used:list):
     return data, X, Y
 
 def prepare_test_data(Train_data, timesteps, feature_used:list):
-    path = "../new test/"
+    path = "./data/Test/imputed_fired/"
     data = {}
 
     start_at = pd.Timestamp("2019-3-18 12:00:00")
@@ -51,9 +51,7 @@ def prepare_test_data(Train_data, timesteps, feature_used:list):
 
     for province in provinces:
         
-        testdf = pd.read_csv(path+f'{province}_new_test.csv', index_col=0, parse_dates=True)[feature_used]
-        testdf['PM2.5'] = testdf['PM2.5'].replace(0.0, np.nan)
-        testdf = testdf.dropna(subset=['PM2.5'])
+        testdf = pd.read_csv(path+f'{province}_imputed_fired.csv', index_col=0, parse_dates=True)[feature_used]
         
         df = Train_data[province].append(testdf)
 
@@ -124,3 +122,19 @@ def scale_data(X, Y, data):
             
     
     return x_scalers, y_scalers, X_scaled, Y_scaled
+
+def quick_eval(path, province):
+    m = tf.keras.models.load_model(path)
+    print(f"province: {province}")
+
+    x_eval, y_eval = x_[province]['Test'], y_[province]['Test']
+    m.evaluate(x_eval, y_eval)
+
+    pred = m(x_eval)
+    rmse = []
+
+    for i in range(len(pred)):
+        p = y_train_scalers[province].inverse_transform(pred[i].numpy().reshape((-1,1)))
+        y_t = Y_test[province][i].values
+        rmse.append(np.sqrt(mse(p, y_t)))
+    return np.mean(rmse)
