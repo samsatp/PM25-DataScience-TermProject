@@ -7,7 +7,7 @@ We are given these dataset:
 - Wind data: wind direction, wind speed
 - Temperature data
 - Fire hotspot data
-In this project, we will be using the information to predict the level of PM2.5 of the next 72 hours. We will use LSTM(*Long-short term memory*) in this task.
+In this project, we will be using the information to predict the level of PM2.5 of the next 72 hours.
 
 ## Project structure
 - Folders
