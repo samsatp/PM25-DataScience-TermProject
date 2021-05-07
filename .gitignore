@@ -9,3 +9,5 @@
 
 *.zip
 /my_logs
+
+/.vscode
