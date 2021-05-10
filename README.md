@@ -31,9 +31,11 @@ In this project, we will be using the information to make predictions. We will f
 - Notebook `5` do **train models with train data**
 - Notebook `6` do **evaluate models' performance with Test data**
 - Notebook `7` do **making submission file**
-
 - Notebook `1, 2, 3, 4` need functions defined in `util_get_data.py` and `util_handle_missing.py`
 - Notebook `5, 6, 7` need function defined in `util_input_output_model.py`
+- Train data is in `data/Train/imputed_fired`
+- Test data is in `data/new test`
+
 
 ## Results
 - These models below have *720* timesteps as an input, each timestep contains 4 features(PM2.5, Wind direction, Wind Speed, Temp) and give RMSE = **10.56**

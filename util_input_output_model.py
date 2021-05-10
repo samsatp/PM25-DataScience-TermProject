@@ -128,8 +128,6 @@ def scale_data(X, Y, data):
     return x_scalers, y_scalers, X_scaled, Y_scaled
 
 def prepare_new_test(Train_data, timesteps, feature_used:list):
-    # Use Test file from folder outside this project because
-    # YOU changed Test files so frequently
     path = "./data/new test/"
     data = {}
 
