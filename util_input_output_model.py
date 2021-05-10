@@ -6,8 +6,8 @@ from sklearn.preprocessing import MinMaxScaler
 
 provinces = ['Bangkok','Chanthaburi','Chiang Mai','Kanchanaburi','Songkhla','Khon Kaen']
 
-# PM2.5,WindDir,Wind Speed(km/h),Temp(C),Cambodia_frp,Myanmar_frp,Thailand_frp,Lao_PDR_frp
 def prepare_train_data(timesteps, feature_used:list):
+    # Train data: from 2016-03-03 to 2019-03-17
     path = f'./data/Train/imputed_fired/'
     data = {}
 
@@ -39,6 +39,9 @@ def prepare_train_data(timesteps, feature_used:list):
 
     return data, X, Y
 
+
+## DEPRECATED
+'''
 def prepare_test_data(Train_data, timesteps, feature_used:list):
     path = "./data/Test/imputed_fired/"
     data = {}
@@ -73,7 +76,8 @@ def prepare_test_data(Train_data, timesteps, feature_used:list):
             start_at+=timedelta(hours=1)
 
 
-    return data, X, Y            
+    return data, X, Y       
+'''     
 '''
         for base in predict_at:
             
@@ -123,6 +127,42 @@ def scale_data(X, Y, data):
     
     return x_scalers, y_scalers, X_scaled, Y_scaled
 
+def prepare_new_test(Train_data, timesteps, feature_used:list):
+    # Use Test file from folder outside this project because
+    # YOU changed Test files so frequently
+    path = "./data/new test/"
+    data = {}
+
+    hour_step = timedelta(hours= timesteps-1)
+    X = defaultdict(lambda: list())
+    Y = defaultdict(lambda: list())
+
+    for province in provinces:
+        
+        testdf = pd.read_csv(path+f'{province}_new_test.csv', index_col=0, parse_dates=True)[feature_used]
+        
+        idx = testdf.iloc[:-72].index
+        predict_at = idx[idx.hour.isin([6,12,18,0])]
+        
+        df = Train_data[province].append(testdf)
+
+        for base in predict_at:
+            
+            i = list(df.index).index(base)
+
+            ## X
+            x = df.iloc[i-timesteps+1:i+1]
+            
+            ## Y
+            y = df.iloc[i+1:i+73, [0]]
+
+            X[province].append(x)
+            Y[province].append(y)
+
+    return data, X, Y
+
+## DEPRECATED
+'''
 def quick_eval(path, province):
     m = tf.keras.models.load_model(path)
     print(f"province: {province}")
@@ -138,3 +178,4 @@ def quick_eval(path, province):
         y_t = Y_test[province][i].values
         rmse.append(np.sqrt(mse(p, y_t)))
     return np.mean(rmse)
+'''
