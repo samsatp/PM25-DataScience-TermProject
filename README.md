@@ -27,14 +27,14 @@ In this project, we will be using the information to make predictions. We will f
     - `util.py` : keep the utility functions.
 
 ## User guide
-- Notebook `1, 2, 3, 4` do **preprocessing steps**
-- Notebook `5` do **train models with train data**
-- Notebook `6` do **evaluate models' performance with Test data**
-- Notebook `7` do **making submission file**
-- Notebook `1, 2, 3, 4` need functions defined in `util_get_data.py` and `util_handle_missing.py`
-- Notebook `5, 6, 7` need function defined in `util_input_output_model.py`
+- Notebook `1, 2, 3, 4` do preprocessing steps and are no need to be ran again.
 - Train data is in `data/Train/imputed_fired`
 - Test data is in `data/new test`
+- Notebook `5` do training models with Train data and predicting Test data.
+- Notebook `6` do evaluating models' performance with Test data.
+- Notebook `7` do predicting Test data with trained models.
+- Notebook `1, 2, 3, 4` need functions defined in `util_get_data.py` and `util_handle_missing.py`
+- Notebook `5, 6, 7` need function defined in `util_input_output_model.py`
 
 
 ## Results
@@ -45,6 +45,7 @@ In this project, we will be using the information to make predictions. We will f
     - Kanchanaburi : Models\Kanchanaburi_run_2021_05_08-15_58_45_chckpoint.h5
     - Khon Kaen : Models\Khon Kaen_run_2021_05_07-23_38_36_chckpoint.h5
     - Chiang Mai : Models\Chiang Mai_run_2021_05_08-07_41_04_chckpoint.h5
+
 - These models below have *360* timesteps as an input, each timestep contains all features(PM2.5, Wind direction, Wind Speed, Temp, fire from 4 countries) and give RMSE = **10.96**
     - Bangkok : Models\Bangkok_run_2021_04_30-14_43_39.h5
     - Chanthaburi : Models\Chanthaburi_run_2021_04_26-10_42_58_final_26Apr1155.h5
